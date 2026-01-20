@@ -1,7 +1,7 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, setToken } from "../apiClient";
+import 'C:/Users/Alexandre/Downloads/FrontCadastrosFiasco/sistemaCadastrosFiasco-frontend/src/pages/css/Login.css'; // Para estilos customizados
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -14,36 +14,44 @@ export default function Login() {
         setErro("");
 
         try {
-            const data = await api.post("/auth/login", { email, senha });
-            setToken(data.token);
+            const response = await api.post("/auth/login", { email, senha });
+            setToken(response.token);
             navigate("/bemvindo");
-        } catch {
+        } catch (err) {
             setErro("Email ou senha inválidos");
         }
     }
 
     return (
-        <div style={{ padding: 40 }}>
-            <h2>Login</h2>
+        <div className="login-container">
+            <h2 className="login-title">Bem-vindo de volta!</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <input
+                    className="login-input"
                     placeholder="Email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                /><br/>
+                    required
+                />
 
                 <input
+                    className="login-input"
                     type="password"
                     placeholder="Senha"
                     value={senha}
                     onChange={e => setSenha(e.target.value)}
-                /><br/>
+                    required
+                />
 
-                {erro && <p style={{ color: "red" }}>{erro}</p>}
+                {erro && <p className="error-message">{erro}</p>}
 
-                <button>Entrar</button>
+                <button className="login-btn">Entrar</button>
             </form>
+
+            <div className="register-link">
+                <p>Não tem uma conta? <a href="/cadastro">Crie uma agora</a></p>
+            </div>
         </div>
     );
 }
